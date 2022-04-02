@@ -23,9 +23,3 @@ def find_tag(soup, tag=None, attrs=None):
         logging.error(error_msg, stack_info=True)
         raise ParserFindTagException(error_msg)
     return searched_tag
-
-def find_tag(soup, tag, attrs=None):
-    searched_tag = soup.find(tag, attrs=(attrs or {}))
-
-def find_tag(soup, tag, attrs={}):
-    searched_tag = soup.find(tag, attrs=attrs)
