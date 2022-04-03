@@ -40,5 +40,3 @@ def get_pep_status(session, pep_status, pep_url):
         )
         logging.error(error_msg)
     return status
-
-
