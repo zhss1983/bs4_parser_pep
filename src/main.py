@@ -12,7 +12,7 @@ from constants import (
 )
 from exceptions import ParserFindTagException
 from outputs import control_output
-from utils import find_tag, get_response
+from utils import find_tag, get_pep_status, get_response
 
 
 def whats_new(session):
@@ -82,22 +82,6 @@ def download(session):
     return
 
 
-def get_pep_status(session, pep_status, pep_url):
-    response = get_response(session, pep_url)
-    soup = BeautifulSoup(response.text, features='lxml')
-    pep_status_table = find_tag(
-        soup, 'dl', {'class': 'rfc2822 field-list simple'})
-    status = pep_status_table.find('dt', text='Status')
-    status = status.find_next_sibling('dd').text
-    if status not in pep_status:
-        error_msg = (
-            f'Несовпадающие статусы:\n{pep_url}\nСтатус в карточке: '
-            f'{status}\nОжидаемые статусы: {pep_status}'
-        )
-        logging.error(error_msg)
-    return status
-
-
 def pep(session):
     def get_link(tag):
         link = find_tag(tag, 'a')['href']
@@ -107,7 +91,8 @@ def pep(session):
 
     def tr_preprocessing(tag):
         td = tag.find_all('td')
-        return EXPECTED_STATUS[td[0].text[1:2]], get_link(td[1])
+        char = td[0].text[1:2]
+        return EXPECTED_STATUS.get(char, [char]), get_link(td[1])
 
     response = get_response(session, MAIN_PEP_URL)
     soup = BeautifulSoup(response.text, features='lxml')
