@@ -11,7 +11,6 @@ __pycache__/
 build/
 develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
 lib/
@@ -146,4 +145,5 @@ dmypy.json
 .mypy_cache
 http_cache.sqlite
 downloads/
-logs/
+*.log
+*.logs
